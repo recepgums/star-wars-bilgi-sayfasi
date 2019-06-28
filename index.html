@@ -18,7 +18,7 @@
             //karakter isimlerini multiselecte ekleyecek kod
                 for (var i = 0; i < data.results.length; i++) { 
                     x+='<option value='+i+'>'+data.results[i].name+'</option>';
-                } 
+                
                 $("#people_select").html(x);
                 $('#people_select').on('change', function() {
                     $('#films_select').val('100');//diğer multiselecti bos yapmazsam karakter kısmında isim yazarken, yanda film bilgisi olur bu da saçma olur. 
@@ -77,11 +77,11 @@
     </script>  
 </head>
 <body class="resim arkaplan" >
-    <h1 id="dene" align="center" class="starwarsyazisi-bos">STAR WARS info</h1><br><br>
+    <h1 id="dene" align="center" class="starwarsyazisi-bos">STAR WARS</h1><br><br>
     <div class="container">
         <div class="row">
             <div  class="secim_div col-sm">
-                <h3 class="starwarsyazisi-bos">People</h3>
+                <h3 class="starwarsyazisi-bos">Peoples</h3>
                 <select id="people_select"  style="width: 250px">
                 </select>
                 <h3 class="starwarsyazisi-bos">Films</h3>
