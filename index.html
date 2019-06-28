@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link href="stil_dosyasi.css" type="text/css" rel="stylesheet"/>
+        <script>
+        var people_features=new Array("name","height","mass","hair_color","skin_color","eye_color","birth_year","gender","homeworld","films","species","vehicles","starships");
+        var films_features=new Array("title","episode_id","opening_crawl","director","producer","release_date","characters","planets","starships");
+        const url='https://swapi.co/api/people/?format=json';
+        const url2='https://swapi.co/api/films/?format=json';
+        //karakterler için getjson kodu
+        $.getJSON(url,function(data) {
+            var x='<option value="100" style="text-align:center" >-----</option>';
+            //karakter isimlerini multiselecte ekleyecek kod
+                for (var i = 0; i < data.results.length; i++) { 
+                    x+='<option value='+i+'>'+data.results[i].name+'</option>';
+                } 
+                $("#people_select").html(x);
+                $('#people_select').on('change', function() {
+                    $('#films_select').val('100');//diğer multiselecti bos yapmazsam karakter kısmında isim yazarken, yanda film bilgisi olur bu da saçma olur. 
+                    yazi="";
+                    for (var i = 0; i < people_features.length; i++) {
+                        if(i>=8){
+                            var y =`${people_features[i]}:${data.results[this.value][people_features[i]]}`  ;  
+                            kesilmeli=y.indexOf(":"); //baslıkları ve verileri ayrı ele almak için
+                            var deger=y.substr(0,kesilmeli);
+                            y=y.substr(kesilmeli+1).split(",");//linkleri "," a göre ayırma
+                            yazi+="<b>"+deger+"</b>"+":<br>";
+                            for (var index = 0; index < y.length; index++) {
+                                yazi+='&nbsp;&nbsp;<a href="'+y[index]+'">'+y[index]+'</a><br>';    
+                                //linkleri yazdırma
+                            }
+                        } else{
+                            yazi+=`<b>${people_features[i]}</b>:${data.results[this.value][people_features[i]]}<br>`
+                        }
+                    }
+                    $(".baska1").html(yazi);
+                });
+    });
+    //filmler için getjson kodu
+    $.getJSON(url2,function(data) {
+            var x='<option value="100" style="text-align:center" >-----</option>';
+                for (var i = 0; i < data.results.length; i++) { 
+                    x+='<option value='+i+'>'+data.results[i].title+'</option>';
+                }  
+                $("#films_select").html(x);
+                $('#films_select').on('change', function() {
+                    $('#people_select').val('100');
+                    yazi="";
+                    for (var i = 0; i < films_features.length; i++) {
+                        if(i==2){
+                            var y =`${films_features[i]}:${data.results[this.value][films_features[i]]}`  ;  
+                            y=y.substr(14);
+                            yazi+="<b>Opening crawl :</b> <br><i>&nbsp;&nbsp;"+y+"</i><br>";
+                            //burası uzun olduğu için farklı olsun istedim. italik ve satır başı ekleme
+                        }
+                        else if(i>=6){//linkler 6. indisten sonra olduğu için hepsinde link ayırma işlemi yapılacak.
+                            var y =`${films_features[i]}:${data.results[this.value][films_features[i]]}`  ;  
+                            kesilmeli=y.indexOf(":");
+                            var deger=y.substr(0,kesilmeli);
+                            y=y.substr(kesilmeli+1).split(",");
+                            yazi+="<b>"+deger+"</b>"+" :<br>";
+                            for (var index = 0; index < y.length; index++) {
+                                yazi+='&nbsp;&nbsp;<a href="'+y[index]+'">'+y[index]+'</a><br>';    
+                            }
+                        }else{
+                            yazi+=`<b>${films_features[i]}</b> :  ${data.results[this.value][films_features[i]]}<br>`
+                        }
+                    }
+                    $(".baska1").html(yazi);
+                });
+    });
+    </script>  
+</head>
+<body class="resim arkaplan" >
+    <h1 id="dene" align="center" class="starwarsyazisi-bos">STAR WARS info</h1><br><br>
+    <div class="container">
+        <div class="row">
+            <div  class="secim_div col-sm">
+                <h3 class="starwarsyazisi-bos">People</h3>
+                <select id="people_select"  style="width: 250px">
+                </select>
+                <h3 class="starwarsyazisi-bos">Films</h3>
+                <select id="films_select"  style="width: 250px">
+                </select>
+            </div>
+        <div class="baska1 col-sm " >
+        </div>
+        </div>
+        <div class="row" >
+        </div>
+    </div>
+</body>
+</html>
